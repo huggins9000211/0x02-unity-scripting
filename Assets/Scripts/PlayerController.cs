@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerController : MonoBehaviour
@@ -18,6 +19,14 @@ public class PlayerController : MonoBehaviour
         score = 0;
         rigidbody = GetComponent<Rigidbody> ();
     }
+    void Death()
+    {
+        if (health == 0)
+        {
+            Debug.Log($"Game Over!");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -28,6 +37,7 @@ public class PlayerController : MonoBehaviour
         Vector3 move = new Vector3(Horiz, 0.0f, Vert);
 
         rigidbody.AddForce(move * speed);
+        Death();
     }
 
     void OnTriggerEnter(Collider other)
@@ -42,6 +52,10 @@ public class PlayerController : MonoBehaviour
         {
             health--;
             Debug.Log($"Health: {health}");
+        }
+        else if (other.gameObject.tag == "Goal")
+        {
+            Debug.Log($"You win!");
         }
     }
 }
